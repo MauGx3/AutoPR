@@ -46,11 +46,12 @@ This folder contains various files and folders related to automating tasks and w
 
 ### [`Dockerfile`](https://github.com/irgolic/AutoPR/blob/1d818f4daeb78662b7d831d89a73d3258bb95e2f/./Dockerfile)
 
-🏗️ Sets up a Docker image based on the `duffn/python-poetry:3.9-bullseye` image    
-🔧 Installs git from the bullseye-backports repository    
+🏗️ Sets up a Docker image based on the official `python:3.11-slim` image    
+🔧 Installs git from the default repository    
+📦 Installs Poetry 1.7.1 for dependency management    
 📥 Copies an entrypoint script and makes it executable    
 📥 Copies the `pyproject.toml` and `poetry.lock` files    
-🔧 Activates the virtual environment and installs the project dependencies using Poetry    
+🔧 Installs the project dependencies using Poetry    
 📥 Copies the rest of the files to the `/app` directory    
 🔧 Installs the application using Poetry    
 🚀 Sets the entrypoint to `/entrypoint.sh` for running the app    

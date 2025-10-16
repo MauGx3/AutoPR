@@ -1,23 +1,29 @@
-FROM duffn/python-poetry:3.9-bullseye
+FROM python:3.11-slim
 
 # Install git
-RUN echo "deb http://deb.debian.org/debian bullseye-backports main" > /etc/apt/sources.list.d/backports.list && \
-    apt-get update && \
-    apt-get install -y -t bullseye-backports git
+RUN apt-get update && \
+    apt-get install -y git && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install poetry using pip
+ENV POETRY_VERSION=1.7.1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=true \
+    POETRY_NO_INTERACTION=1
+RUN pip install --no-cache-dir poetry==${POETRY_VERSION}
 
 # Set up entrypoint
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+# Install dependencies
 COPY pyproject.toml poetry.lock ./
-# Poetry is installed with `pip`, so active our virtual environmennt and install projects dependecies there, so they don't conflict with poetry's dependencies.
-RUN . $VENV_PATH/bin/activate && $POETRY_HOME/poetry install --no-root
+RUN poetry install --no-root
 
 WORKDIR /app
 COPY . .
 
 # Install the app
-RUN . $VENV_PATH/bin/activate && $POETRY_HOME/poetry install
+RUN poetry install
 
 # Run the app
 CMD ["/entrypoint.sh"]
