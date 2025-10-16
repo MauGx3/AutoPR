@@ -1,9 +1,9 @@
-FROM duffn/python-poetry:3.9-bullseye
+FROM duffn/python-poetry:3.11-slim
 
 # Install git
-RUN echo "deb http://deb.debian.org/debian bullseye-backports main" > /etc/apt/sources.list.d/backports.list && \
-    apt-get update && \
-    apt-get install -y -t bullseye-backports git
+RUN apt-get update && \
+    apt-get install -y git && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set up entrypoint
 COPY entrypoint.sh /entrypoint.sh
